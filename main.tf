@@ -29,7 +29,7 @@ resource "ibm_is_vpc_address_prefix" "vpc-ap3" {
   cidr = "${var.zone3_cidr}"
 }
 
-# Subnets Zone 1
+# Subnets 
 resource "ibm_is_subnet" "node1" {
   name            = "node1"
   vpc             = "${ibm_is_vpc.vpc2.id}"
@@ -54,43 +54,24 @@ resource "ibm_is_subnet" "node3" {
   depends_on      = ["ibm_is_vpc_address_prefix.vpc-ap3"]
 }
 
-#CLUSTER
-
-resource "ibm_container_vpc_cluster" "cluster" {
-  name               = "${var.cluster_name}"
-  vpc_id             = "${ibm_is_vpc.vpc2.id}"
-  flavor             = "${var.machine_type}"
-  worker_count       = "${var.worker_count}"
-  # resource_group_id = data.ibm_resource_group.resource_group.id
-
-  zones {
-    subnet_id = "${ibm_is_subnet.node1.id}"
-    name      = "${var.zone1}"
-  }
-}
-
-resource "ibm_container_vpc_worker_pool" "cluster_pool1" {
-  cluster           = "${ibm_container_vpc_cluster.cluster.id}"
-  worker_pool_name  = "mywp1"
-  vpc_id             = "${ibm_is_vpc.vpc2.id}"
-  flavor             = "${var.machine_type}"
-  worker_count       = "${var.worker_count}"
-  # resource_group_id = data.ibm_resource_group.resource_group.id
-  zones {
-    name      = "${var.zone2}"
-    subnet_id = "${ibm_is_subnet.node2.id}"
-  }
-}
-
-resource "ibm_container_vpc_worker_pool" "cluster_pool2" {
-  cluster           = "${ibm_container_vpc_cluster.cluster.id}"
-  worker_pool_name  = "mywp2"
-  vpc_id             = "${ibm_is_vpc.vpc2.id}"
-  flavor             = "${var.machine_type}"
-  worker_count       = "${var.worker_count}"
-  # resource_group_id = data.ibm_resource_group.resource_group.id
-  zones {
-    name      = "${var.zone3}"
-    subnet_id = "${ibm_is_subnet.node3.id}"
-  }
+variable "cluster_zones" {
+  depends_on      = ["ibm_is_subnet.node1","ibm_is_subnet.node2","ibm_is_subnet.node3"]
+  description = "List maps containing a zone number and the id of a subnet in that zone. Can be used to create a cluster on any number of subnets in a single region"
+  type        = "list"
+    
+   example =[
+    {
+      zone     = 1
+      subnet_id = "${ibm_is_subnet.node1.id}"
+    },
+    {
+      zone     = 2
+      subnet_id = "${ibm_is_subnet.node2.id}"
+    },
+    {
+      zone     = 3
+      subnet_id = "${ibm_is_subnet.node3.id}"
+    }
+  ]
+  
 }
