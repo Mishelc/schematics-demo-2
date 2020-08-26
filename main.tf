@@ -59,7 +59,7 @@ resource "ibm_is_subnet" "node3" {
 ##############################################################################
 
 
-resource "ibm_container_vpc_cluster cluster" {
+resource "ibm_container_vpc_cluster" "cluster-iks-demo" {
   depends_on         = ["ibm_is_subnet.node1", "ibm_is_subnet.node2", "ibm_is_subnet.node3"]
   name               = "${var.cluster_name}"
   vpc_id             = "${data.ibm_is_vpc.vpc.id}"
