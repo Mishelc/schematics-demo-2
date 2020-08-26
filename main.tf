@@ -62,7 +62,7 @@ resource "ibm_is_subnet" "node3" {
 resource "ibm_container_vpc_cluster" "cluster-iks-demo" {
   depends_on         = ["ibm_is_subnet.node1", "ibm_is_subnet.node2", "ibm_is_subnet.node3"]
   name               = "${var.cluster_name}"
-  vpc_id             = "${data.ibm_is_vpc.vpc.id}"
+  vpc_id             = "${ibm_is_vpc.vpc2.id}"
   flavor             = "${var.machine_type}"
   worker_count       = "${var.worker_count}"
   # resource_group_id  = "${data.ibm_resource_group.resource_group.id}"
