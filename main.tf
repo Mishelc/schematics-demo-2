@@ -1,7 +1,9 @@
+/*
 resource "ibm_is_ssh_key" "vpc-iks" {
   name       = "vpc-iks"
   public_key = "${var.ssh_public_key}"
 }
+*/
 # Create VPC
 resource "ibm_is_vpc" "vpc2" {
   name = "${var.vpc_name}"
