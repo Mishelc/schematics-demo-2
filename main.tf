@@ -54,24 +54,33 @@ resource "ibm_is_subnet" "node3" {
   depends_on      = ["ibm_is_vpc_address_prefix.vpc-ap3"]
 }
 
-variable "cluster_zones" {
-  depends_on      = ["ibm_is_subnet.node1","ibm_is_subnet.node2","ibm_is_subnet.node3"]
-  description = "List maps containing a zone number and the id of a subnet in that zone. Can be used to create a cluster on any number of subnets in a single region"
-  type        = "list"
-    
-   example =[
+##############################################################################
+# Create IKS on VPC Cluster
+##############################################################################
+
+
+resource "ibm_container_vpc_cluster cluster" {
+  depends_on         = ["ibm_is_subnet.node1", "ibm_is_subnet.node2", "ibm_is_subnet.node3"]
+  name               = "${var.cluster_name}"
+  vpc_id             = "${data.ibm_is_vpc.vpc.id}"
+  flavor             = "${var.machine_type}"
+  worker_count       = "${var.worker_count}"
+  # resource_group_id  = "${data.ibm_resource_group.resource_group.id}"
+  zones = [
     {
-      zone     = 1
       subnet_id = "${ibm_is_subnet.node1.id}"
+      name      = "${var.zone1}"
     },
     {
-      zone     = 2
       subnet_id = "${ibm_is_subnet.node2.id}"
+      name      = "${var.zone2}"
     },
     {
-      zone     = 3
       subnet_id = "${ibm_is_subnet.node3.id}"
+      name      = "${var.zone3}"
     }
   ]
-  
+  disable_public_service_endpoint = "${var.disable_pse}"
 }
+
+

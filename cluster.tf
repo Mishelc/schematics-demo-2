@@ -2,6 +2,7 @@
 # Create IKS on VPC Cluster
 ##############################################################################
 
+/*
 
 resource "ibm_container_vpc_cluster cluster" {
 
@@ -23,3 +24,4 @@ resource "ibm_container_vpc_cluster cluster" {
 }
 
 
+*/

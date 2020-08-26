@@ -55,26 +55,7 @@ variable "cluster_name" {
   description = "name for the iks cluster"
   default     = "iks-on-vpc-cluter"
 }
-variable "cluster_zones" {
-  description = "List maps containing a zone number and the id of a subnet in that zone. Can be used to create a cluster on any number of subnets in a single region"
-  type        = "list"
-    /*
-   example =[
-    {
-      zone     = 1
-      subnet_id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-    },
-    {
-      zone     = 2
-      subnet_id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-    },
-    {
-      zone     = 3
-      subnet_id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-    }
-  ]
-  */
-}
+
 variable "machine_type" {
   description = "Machine type for the IKS Cluster"
   default     = "b2.4x16"
