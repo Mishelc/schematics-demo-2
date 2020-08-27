@@ -56,6 +56,18 @@ resource "ibm_is_subnet" "node3" {
   depends_on      = ["ibm_is_vpc_address_prefix.vpc-ap3"]
 }
 
+
+resource "ibm_is_security_group_rule" "sg1_tcp_rule" {
+  # depends_on = ["ibm_is_floating_ip.floatingip1", "ibm_is_floating_ip.floatingip2"]
+  group     = "${ibm_is_vpc.vpc2.default_security_group}"
+  direction = "inbound"
+  remote    = "0.0.0.0/0"
+  tcp = {
+    port_min = "30000"
+    port_max = "32767"
+  }
+}
+
 ##############################################################################
 # Create IKS on VPC Cluster
 ##############################################################################
